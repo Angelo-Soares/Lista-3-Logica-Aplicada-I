@@ -1,0 +1,236 @@
+from abc import ABC, abstractmethod
+
+
+class Televisor(ABC):
+
+    def __init__(self, marca: str, modelo: str, tamanho: float):
+        self.__marca = marca
+        self.__modelo = modelo
+        self.__tamanho = tamanho
+        self.__ligada = False
+        self.__volume = 20  # Valor inicial
+        self.__canal = 5  # Valor inicial
+        self.__max_volume = 100
+        self.__min_volume = 0
+        self.__max_canal = 99
+
+    def exibir_informacoes(self):
+        status = "Ligada" if self.__ligada else "Desligada"
+        print(f"--- {self.__modelo} ({self.__tamanho}\") ---")
+        print(f"Marca: {self.__marca}, Status: {status}")
+        print(f"Volume: {self.__volume}, Canal Atual: {self.__canal}")
+
+    # Métodos Abstratos
+
+    @abstractmethod
+    def ligar(self):
+        pass
+
+    @abstractmethod
+    def Desligar(self):
+        pass
+
+    @abstractmethod
+    def aumentarVolume(self):
+        pass
+
+    @abstractmethod
+    def diminuirVolume(self):
+        pass
+
+    @abstractmethod
+    def aumentarCanais(self):
+        pass
+
+    @abstractmethod
+    def diminuirCanais(self):
+        pass
+
+    @abstractmethod
+    def NumeroCanais(self):
+        pass
+
+    # Getters Auxiliares
+    def _is_ligada(self):
+        return self.__ligada
+
+    def _set_ligada(self, status: bool):
+        self.__ligada = status
+
+    def _get_volume(self):
+        return self.__volume
+
+    def _set_volume(self, novo_volume: int):
+        self.__volume = novo_volume
+
+    def _get_canal(self):
+        return self.__canal
+
+    def _set_canal(self, novo_canal: int):
+        self.__canal = novo_canal
+
+    def _get_max_volume(self):
+        return self.__max_volume
+
+    def _get_min_volume(self):
+        return self.__min_volume
+
+    def _get_max_canal(self):
+        return self.__max_canal
+
+
+# INTERFACE: CONECTIVIDADE
+
+class Conectividade(ABC):
+
+    @abstractmethod
+    def conectar_internet(self):
+        pass
+
+
+# CLASSE CONCRETA: SMART TV (Herda Televisor e Implementa Conectividade)
+
+class SmartTV(Televisor, Conectividade):
+
+    def __init__(self, marca: str, modelo: str, tamanho: float, so: str):
+        super().__init__(marca, modelo, tamanho)
+        self.__sistema_operacional = so
+
+    def ligar(self):
+        if not self._is_ligada():
+            self._set_ligada(True)
+            print(f"Ligando a Smart TV ({self._get_canal()}) com sistema operacional {self.__sistema_operacional}.")
+        else:
+            print("A Smart TV já está ligada.")
+
+    def Desligar(self):
+        if self._is_ligada():
+            self._set_ligada(False)
+            print("Desligando a Smart TV.")
+        else:
+            print("A Smart TV já está desligada.")
+
+    def conectar_internet(self):
+        print("Smart TV conectada via Wi-Fi.")
+
+    def aumentarVolume(self):
+        volume = self._get_volume()
+        max_vol = self._get_max_volume()
+        if self._is_ligada() and volume < max_vol:
+            self._set_volume(volume + 1)
+            print(f"Volume: {self._get_volume()}")
+
+    def diminuirVolume(self):
+        volume = self._get_volume()
+        min_vol = self._get_min_volume()
+        if self._is_ligada() and volume > min_vol:
+            self._set_volume(volume - 1)
+            print(f"Volume: {self._get_volume()}")
+
+    def aumentarCanais(self):
+        if self._is_ligada():
+            canal = self._get_canal()
+            max_canal = self._get_max_canal()
+            self._set_canal((canal % max_canal) + 1)
+            print(f"Canal: {self._get_canal()}")
+
+    def diminuirCanais(self):
+        if self._is_ligada():
+            canal = self._get_canal()
+            max_canal = self._get_max_canal()
+            novo_canal = canal - 1 if canal > 1 else max_canal
+            self._set_canal(novo_canal)
+            print(f"Canal: {self._get_canal()}")
+
+    def NumeroCanais(self):
+        return self._get_max_canal()
+
+
+# CLASSE CONCRETA: TV COMUM (Herda Televisor e Implementa Conectividade)
+
+class TVComum(Televisor, Conectividade):
+
+    def ligar(self):
+        if not self._is_ligada():
+            self._set_ligada(True)
+            print("Ligando a TV comum.")
+        else:
+            print("A TV comum já está ligada.")
+
+    def Desligar(self):
+        if self._is_ligada():
+            self._set_ligada(False)
+            print("Desligando a TV comum.")
+        else:
+            print("A TV comum já está desligada.")
+
+    def conectar_internet(self):
+        print("Esta TV não possui conexão com a internet.")
+
+    def aumentarVolume(self):
+        volume = self._get_volume()
+        max_vol = self._get_max_volume()
+        if self._is_ligada() and volume < max_vol:
+            self._set_volume(volume + 1)
+            print(f"Volume: {self._get_volume()}")
+
+    def diminuirVolume(self):
+        volume = self._get_volume()
+        min_vol = self._get_min_volume()
+        if self._is_ligada() and volume > min_vol:
+            self._set_volume(volume - 1)
+            print(f"Volume: {self._get_volume()}")
+
+    def aumentarCanais(self):
+        if self._is_ligada():
+            canal = self._get_canal()
+            max_canal = self._get_max_canal()
+            self._set_canal((canal % max_canal) + 1)
+            print(f"Canal: {self._get_canal()}")
+
+    def diminuirCanais(self):
+        if self._is_ligada():
+            canal = self._get_canal()
+            max_canal = self._get_max_canal()
+            novo_canal = canal - 1 if canal > 1 else max_canal
+            self._set_canal(novo_canal)
+            print(f"Canal: {self._get_canal()}")
+
+    def NumeroCanais(self):
+        return self._get_max_canal()
+
+
+# DEMONSTRAÇÃO DE USO DAS CLASSES E FUNÇÕES
+if __name__ == "__main__":
+
+    # 1. SMART TV
+    smart_tv = SmartTV("Samsung", "QLED", 55.0, "Tizen OS")
+    print("\n--- TESTE SMART TV ---")
+    smart_tv.exibir_informacoes()
+
+    smart_tv.ligar()  # Polimorfismo: Comportamento específico
+    smart_tv.aumentarVolume()
+    smart_tv.aumentarVolume()
+    smart_tv.diminuirCanais()
+
+    smart_tv.conectar_internet()  # Implementação da Interface
+
+    smart_tv.exibir_informacoes()
+    smart_tv.Desligar()
+
+    print("\nTotal de canais disponíveis:", smart_tv.NumeroCanais())
+
+    # 2. TV COMUM
+    tv_comum = TVComum("Philco", "Plasma", 32.0)
+    print("\n--- TESTE TV COMUM ---")
+    tv_comum.exibir_informacoes()
+
+    tv_comum.ligar()  # Polimorfismo: Comportamento específico
+    tv_comum.aumentarCanais()
+    tv_comum.aumentarCanais()
+    tv_comum.diminuirVolume()
+
+    tv_comum.conectar_internet()  # Implementação da Interface
+
+    tv_comum.exibir_informacoes()
+    tv_comum.Desligar()
