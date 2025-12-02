@@ -1,0 +1,131 @@
+from datetime import date
+
+
+# No diagrama da questão está como Client, mas como o enuncionado da questão pede irei fazer com Person.
+class Client:
+    def __init__(self, name: str, cpf: int, address: str, address_number: int,
+                 address_complement: str, dt_birth: date, phone: int, email: str):
+        self.__name = name
+        self.__cpf = cpf
+        self.__address = address
+        self.__address_number = address_number
+        self.__address_complement = address_complement
+        self.__dt_birth = dt_birth
+        self.__phone = phone
+        self.__email = email
+
+    def __str__(self):
+        return (f"Cliente: {self.__name}\n"
+                f"CPF: {self.__cpf}\n"
+                f"Email: {self.__email}")
+
+
+    def updatePerson(self, data: int) -> int:
+        # Como no Diagrama de Classe estava para retornar um inteiro, vou considerar o Cliente pode alterar o endereço como alternativa.
+        self.__address_number = data
+        print(f"Dados atualizados. Novo número: {self.__address_number}")
+        return 1
+
+
+class Account:
+    def __init__(self, agency: int, agency_dig: int, code: int):
+        self.__agency = agency
+        self.__agency_dig = agency_dig
+        self.__code = code
+
+    def update_balance(self) -> int:
+        print("Atualizando balanço da conta genérica...")
+        return 0
+
+    # Getters auxiliares
+    def get_agency(self):
+        return self.__agency
+
+
+class CheckingAccount(Account):
+    def __init__(self, agency: int, agency_dig: int, code: int,
+                 account_number: int, account_dig: int, balance: float):
+        super().__init__(agency, agency_dig, code)
+        self.__account_number = account_number
+        self.__account_dig = account_dig
+        self.__balance = balance
+
+    def __str__(self):
+        return (
+            f"Conta Corrente: Ag: {self.get_agency()} | CC: {self.__account_number}-{self.__account_dig} | Saldo: R$ {self.__balance:.2f}")
+
+    def update_balance(self, value: int) -> int:
+        print(f"Processando atualização de saldo com código {value}")
+        return 1
+
+    def addMoney(self, value: float) -> int:
+        if value > 0:
+            self.__balance += value
+            print(f"Depósito de R$ {value:.2f} realizado.")
+            return 1
+        return 0
+
+    def withdrawMoney(self, code: int, value: float) -> int:
+        #code pode ser uma senha ou validação
+        if self.__balance >= value:
+            self.__balance -= value
+            print(f"Saque de R$ {value:.2f} realizado.")
+            return 1
+        else:
+            print("Saldo insuficiente.")
+            return 0
+
+
+class SavingsAccount(Account):
+    def __init__(self, agency: int, agency_dig: int, code: int,
+                 account_number: int, account_dig: int, balance: float):
+        super().__init__(agency, agency_dig, code)
+        self.__account_number = account_number
+        self.__account_dig = account_dig
+        self.__balance = balance
+
+    def __str__(self):
+        return (
+            f"Conta Poupança: Ag: {self.get_agency()} | CP: {self.__account_number}-{self.__account_dig} | Saldo: R$ {self.__balance:.2f}")
+
+    def update_balance(self, value: int) -> int:
+        print(f"Atualizando rendimentos da poupança base índice: {value}")
+        return 1
+
+    def addMoney(self, value: float) -> int:
+        if value > 0:
+            self.__balance += value
+            print(f"Depósito na Poupança: R$ {value:.2f}")
+            return 1
+        return 0
+
+    def withdrawMoney(self, code: int, value: float) -> int:
+        if self.__balance >= value:
+            self.__balance -= value
+            print(f"Saque da Poupança: R$ {value:.2f}")
+            return 1
+        else:
+            print("Saldo insuficiente na poupança.")
+            return 0
+
+
+# Exemplo com o Main
+if __name__ == "__main__":
+    # Criando um Cliente
+    cliente1 = Client("Angelo", 12345678900, "Manoel Teixeira", 10, "Apto 104", date(1990, 5, 20), 1199999999, "angelogamer@gmail.com")
+    print(cliente1)
+    print("--------------------------------------------------------")
+
+    # Criando Conta Corrente
+    cc = CheckingAccount(4001, 8, 12, 1234, 3, 1500.00)
+    print(cc)
+    cc.addMoney(500.00)
+    cc.withdrawMoney(123, 200.00)
+    print(cc)
+    print("--------------------------------------------------------")
+
+    # Criando Conta Poupança
+    cp = SavingsAccount(4001, 8, 12, 4321, 6, 5000.00)
+    print(cp)
+    cp.addMoney(100.00)
+    print(cp)
