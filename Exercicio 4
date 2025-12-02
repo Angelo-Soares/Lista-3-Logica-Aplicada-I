@@ -1,0 +1,64 @@
+class Veiculo:
+
+    def __init__(self, marca: str, modelo: str, ano: int):
+        self.__marca = marca
+        self.__modelo = modelo
+        self.__ano = ano
+
+    def exibir_informacoes(self):
+        print(f"Marca: {self.__marca}, Modelo: {self.__modelo}, Ano: {self.__ano}.")
+
+    def mover(self):
+        print("O veículo está se movendo de forma indeterminada.")
+
+    def get_marca(self):
+        return self.__marca
+
+
+class Carro(Veiculo):
+
+    def __init__(self, marca: str, modelo: str, ano: int, portas: int):
+        super().__init__(marca, modelo, ano)
+        self.__portas = portas  # Atributo específico do Carro
+
+    def mover(self):
+        marca = self.get_marca()  # Usando o getter herdado
+        print(f"O carro {marca} está rodando nas quatro rodas.")
+
+    def exibir_informacoes(self):
+        super().exibir_informacoes()
+        print(f"Possui {self.__portas} portas.")
+
+
+class Moto(Veiculo):
+
+    def __init__(self, marca: str, modelo: str, ano: int, cilindradas: int):
+        super().__init__(marca, modelo, ano)
+        self.__cilindradas = cilindradas  # Atributo específico da Moto
+
+    def mover(self):
+        marca = self.get_marca()  # Usando o getter herdado
+        print(f"A moto {marca} está rodando em duas rodas.")
+
+    def exibir_informacoes(self):
+        super().exibir_informacoes()
+        print(f"Tem {self.__cilindradas} cilindradas.")
+
+# DEMONSTRAÇÃO DE HERANÇA E POLIMORFISMO
+
+if __name__ == "__main__":
+    print("--- DEMONSTRAÇÃO DE VEÍCULOS ---")
+
+    # 1. Objeto Carro
+    carro = Carro("Chevrolet", "Onix", 2023, 4)
+    print("\nOBJETO CARRO")
+    carro.exibir_informacoes()
+    carro.mover()
+    print("--------------------------------------------------------")
+
+    # 2. Objeto Moto
+    moto = Moto("Yamaha", "Fazer 250", 2022, 250)
+    print("\nOBJETO MOTO")
+    moto.exibir_informacoes()
+    moto.mover()
+    print("--------------------------------------------------------")
