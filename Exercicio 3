@@ -1,0 +1,59 @@
+class Animal:
+
+    def __init__(self, nome: str, idade: int, som_caracteristico: str):
+        self.__nome = nome
+        self.__idade = idade
+        self.__som_caracteristico = som_caracteristico
+
+    def exibir_informacoes(self):
+        print(f"Nome: {self.__nome}, Idade: {self.__idade} anos.")
+
+    def emitir_som(self):
+        print(f"O animal faz o som: {self.__som_caracteristico}")
+
+
+class Cachorro(Animal):
+    def __init__(self, nome: str, idade: int):
+        super().__init__(nome, idade, "latido")
+        self.__raca = "Indefinida"  # Exemplo de atributo
+
+    def emitir_som(self):
+        print(f"{self._Animal__nome} diz: Au, au.")
+
+    def exibir_informacoes(self):
+        super().exibir_informacoes()
+        print(f"É um Cachorro da raça: {self.__raca}")
+
+
+class Gato(Animal):
+    def __init__(self, nome: str, idade: int):
+        super().__init__(nome, idade, "miado")
+
+    def emitir_som(self):
+        print(f"{self._Animal__nome} diz: Miau.")
+
+
+# DEMONSTRAÇÃO DE HERANÇA E POLIMORFISMO
+
+if __name__ == "__main__":
+    print("--- DEMONSTRAÇÃO DE HERANÇA ---")
+
+    # 1. Objeto Cachorro
+    dog = Cachorro("Afonso", 3)
+    print("\nOBJETO CACHORRO")
+    dog.exibir_informacoes()
+    dog.emitir_som()
+    print("--------------------------------------------------------")
+
+    # 2. Objeto Gato
+    cat = Gato("Miauzinho", 5)
+    print("\nOBJETO GATO")
+    cat.exibir_informacoes()
+    cat.emitir_som()
+    print("--------------------------------------------------------")
+
+    # 3. Animal Genérico
+    gen_animal = Animal("Pássaro", 1, "canto")
+    print("\n[OBJETO ANIMAL GENÉRICO]")
+    gen_animal.exibir_informacoes()
+    gen_animal.emitir_som()
